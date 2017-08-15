@@ -3,6 +3,7 @@
 import path from 'path'
 
 import Migration from '../src/migration/Migration'
+import { Migrations } from '../src'
 import TestModel from './models/TestModel'
 
 const resetSchema = () => new Promise((resolve, reject) => {
@@ -45,9 +46,8 @@ beforeEach(async () => {
   await ensureSchema()
 })
 
-describe('Migration Tests', async () => {
-  test('should execute a migration', async () => {
-    const migration = new Migration({path: path.resolve(__dirname, 'migrations/A_migration')})
+describe('Migrations Tests', async () => {
+  test('should execute a single migration', async () => {
     const model = new TestModel({myTextField: 'blah', myIntegerField: 777})
     await modelSave(model)
 
@@ -58,6 +58,7 @@ describe('Migration Tests', async () => {
     expect(storedModelsBefore[0].attributes.myTextField).toBe('blah')
 
     // execute the migrations and retest
+    const migration = new Migration({path: path.resolve(__dirname, 'migrations/A_migration')})
     await (migrate(migration))
     const storedModelsAfter = await modelFind(TestModel, {$sort: 'createdDate'})
     expect(storedModelsAfter.length).toBe(3)
@@ -67,4 +68,26 @@ describe('Migration Tests', async () => {
     expect(storedModelsAfter[2].attributes.myIntegerField).toBe(2)
     expect(storedModelsAfter[2].attributes.myTextField).toBe('blah2')
   })
+
+  // test('should execute all migrations in the directory', async () => {
+  //   const model = new TestModel({myTextField: 'blah', myIntegerField: 777})
+  //   await modelSave(model)
+
+  //   // ensure the database is how we expect
+  //   const storedModelsBefore = await modelFind(TestModel, {})
+  //   expect(storedModelsBefore.length).toBe(1)
+  //   expect(storedModelsBefore[0].attributes.myIntegerField).toBe(777)
+  //   expect(storedModelsBefore[0].attributes.myTextField).toBe('blah')
+
+  //   // execute the migrations and retest
+  //   const migrations = new Migrations({path: path.resolve(__dirname, 'migrations')})
+  //   await (migrate(migrations))
+  //   const storedModelsAfter = await modelFind(TestModel, {$sort: 'createdDate'})
+  //   expect(storedModelsAfter.length).toBe(3)
+  //   expect(storedModelsAfter[0].attributes.myIntegerField).toBe(777)
+  //   expect(storedModelsAfter[1].attributes.myIntegerField).toBe(1)
+  //   expect(storedModelsAfter[1].attributes.myTextField).toBe('blah1')
+  //   expect(storedModelsAfter[2].attributes.myIntegerField).toBe(2)
+  //   expect(storedModelsAfter[2].attributes.myTextField).toBe('blah2')
+  // })
 })
