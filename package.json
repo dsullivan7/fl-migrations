@@ -1,0 +1,53 @@
+{
+  "name": "fl-migrations",
+  "version": "0.0.1",
+  "description": "a plugin to implement migrations",
+  "main": "distribution/index.js",
+  "scripts": {
+    "create-db": "psql -tc \"SELECT 1 FROM pg_database WHERE datname = '$DATABASE_NAME'\" | grep -q 1 || psql -c \"CREATE DATABASE $DATABASE_NAME\"",
+    "test": " eval $(cat .test_env) npm run create-db && eval $(cat .test_env) jest --forceExit --coverage",
+    "clean": "rimraf distribution",
+    "lint": "eslint .",
+    "build": "babel src --ignore src/test --out-dir distribution",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dsullivan7/fl-migrations.git"
+  },
+  "author": "Danny Sullivan <dbsullivan23@gmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "migrations"
+  ],
+  "bugs": {
+    "url": "https://github.com/dsullivan7/fl-migrations/issues"
+  },
+  "homepage": "https://github.com/dsullivan7/fl-migrations#readme",
+  "engines": {
+    "node": "8.3.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-eslint": "^7.2.3",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-stage-2": "^6.22.0",
+    "babel-register": "^6.24.0",
+    "backbone": "^1.2.0",
+    "backbone-http": "^0.7.2",
+    "eslint": "^1.5.1",
+    "eslint-config-founderlab": "^0.2.0",
+    "eslint-loader": "^1.1.1",
+    "eslint-plugin-react": "^3.4.2",
+    "fl-backbone-sql": "^2.5.0",
+    "fl-server-utils": "^0.11.0",
+    "jest": "^20.0.4",
+    "pg": "^4.5.1",
+    "queue-async": "^1.0.7",
+    "rimraf": "^2.6.1",
+    "superagent": "^3.5.2"
+  },
+  "dependencies": {
+    "backbone-orm": "^0.7.14"
+  }
+}

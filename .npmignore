@@ -1,0 +1,10 @@
+src
+test
+
+# build tools
+.travis.yml
+.babelrc
+coverage
+
+#linters
+.eslintrc*
