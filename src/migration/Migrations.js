@@ -16,17 +16,25 @@ export default class Migrations {
       })
     })
 
-  migrate = async (callback) => {
-    try {
-      const fileList = fs.readdirSync(this.path)
-      const results = await Promise.all(fileList.sort().map(filename => {
-        const migrationPath = path.resolve(this.path, filename)
-        return this.executeMigration(new Migration({path: migrationPath}))
-      }))
+  migrate = (callback) => {
+    const fileList = fs.readdirSync(this.path)
+    const promiseList = fileList.sort().map(filename => {
+      const migrationPath = path.resolve(this.path, filename)
+      return this.executeMigration(new Migration({path: migrationPath}))
+    })
+    const results = []
+    const promiseChain = promiseList.shift()
+
+    promiseList.forEach((promise) => {
+      promiseChain.then((data) => {
+        results.push(data)
+        return promise
+      })
+    })
+
+    promiseChain.then(data => {
+      results.push(data)
       callback(null, results)
-    }
-    catch (error) {
-      callback(error)
-    }
+    }).catch(error => callback(error))
   }
 }
