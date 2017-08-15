@@ -5,7 +5,8 @@
   "main": "distribution/index.js",
   "scripts": {
     "create-db": "psql -tc \"SELECT 1 FROM pg_database WHERE datname = '$DATABASE_NAME'\" | grep -q 1 || psql -c \"CREATE DATABASE $DATABASE_NAME\"",
-    "test": " eval $(cat .test_env) npm run create-db && eval $(cat .test_env) jest --forceExit --coverage",
+    "test": "eval $(cat .test_env) npm run create-db && eval $(cat .test_env) jest --forceExit --coverage",
+    "test-debug": "eval $(cat .test_env) jest",
     "clean": "rimraf distribution",
     "lint": "eslint .",
     "build": "babel src --ignore src/test --out-dir distribution",

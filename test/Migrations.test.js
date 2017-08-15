@@ -69,25 +69,25 @@ describe('Migrations Tests', async () => {
     expect(storedModelsAfter[2].attributes.myTextField).toBe('blah2')
   })
 
-  // test('should execute all migrations in the directory', async () => {
-  //   const model = new TestModel({myTextField: 'blah', myIntegerField: 777})
-  //   await modelSave(model)
+  test('should execute all migrations in the directory', async () => {
+    const model = new TestModel({myTextField: 'blah', myIntegerField: 777})
+    await modelSave(model)
 
-  //   // ensure the database is how we expect
-  //   const storedModelsBefore = await modelFind(TestModel, {})
-  //   expect(storedModelsBefore.length).toBe(1)
-  //   expect(storedModelsBefore[0].attributes.myIntegerField).toBe(777)
-  //   expect(storedModelsBefore[0].attributes.myTextField).toBe('blah')
+    // ensure the database is how we expect
+    const storedModelsBefore = await modelFind(TestModel, {})
+    expect(storedModelsBefore.length).toBe(1)
+    expect(storedModelsBefore[0].attributes.myIntegerField).toBe(777)
+    expect(storedModelsBefore[0].attributes.myTextField).toBe('blah')
 
-  //   // execute the migrations and retest
-  //   const migrations = new Migrations({path: path.resolve(__dirname, 'migrations')})
-  //   await (migrate(migrations))
-  //   const storedModelsAfter = await modelFind(TestModel, {$sort: 'createdDate'})
-  //   expect(storedModelsAfter.length).toBe(3)
-  //   expect(storedModelsAfter[0].attributes.myIntegerField).toBe(777)
-  //   expect(storedModelsAfter[1].attributes.myIntegerField).toBe(1)
-  //   expect(storedModelsAfter[1].attributes.myTextField).toBe('blah1')
-  //   expect(storedModelsAfter[2].attributes.myIntegerField).toBe(2)
-  //   expect(storedModelsAfter[2].attributes.myTextField).toBe('blah2')
-  // })
+    // execute the migrations and retest
+    const migrations = new Migrations({path: path.resolve(__dirname, 'migrations')})
+    await (migrate(migrations))
+    const storedModelsAfter = await modelFind(TestModel, {$sort: 'createdDate'})
+    expect(storedModelsAfter.length).toBe(3)
+    expect(storedModelsAfter[0].attributes.myIntegerField).toBe(777)
+    expect(storedModelsAfter[1].attributes.myIntegerField).toBe(1)
+    expect(storedModelsAfter[1].attributes.myTextField).toBe('blah1')
+    expect(storedModelsAfter[2].attributes.myIntegerField).toBe(2)
+    expect(storedModelsAfter[2].attributes.myTextField).toBe('blah2')
+  })
 })
