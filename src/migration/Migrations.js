@@ -9,10 +9,13 @@ export default class Migrations {
     this.path = configuration.path
   }
 
-  migrationPromise = (directory, filename, results) =>
+  migrationPromise = (directory, filename) =>
     new Promise((resolve, reject) => {
+      // ensure that the table has been created
       MigrationModel.db().ensureSchema(err => {
         if (err) return reject(err)
+
+        // check to see if this migration has already been run
         MigrationModel.findOne({name: filename}, (err, data) => {
           if (err) return reject(err)
           if (data) {
@@ -30,8 +33,7 @@ export default class Migrations {
             const migration = new MigrationModel({name: filename})
             migration.save((err, data) => {
               if (err) return reject(err)
-              results.push(data)
-              resolve(results)
+              resolve(data)
             })
           })
         })
@@ -39,18 +41,32 @@ export default class Migrations {
     })
 
   migrate = (callback) => {
-    const fileList = fs.readdirSync(this.path)
+    // sort the file list to ensure we are executing migrations in order
+    const fileList = fs.readdirSync(this.path).sort()
     const results = []
-    let promiseChain = Promise.resolve()
+    let promiseChain
 
-    fileList.sort().forEach(filename => {
-      promiseChain = promiseChain.then(() => {
-        return this.migrationPromise(this.path, filename, results)
-      })
+    fileList.forEach(filename => {
+      if (!promiseChain) {
+        promiseChain = this.migrationPromise(this.path, filename)
+      }
+      else {
+        promiseChain = promiseChain.then((data) => {
+          results.push(data)
+          return this.migrationPromise(this.path, filename)
+        })
+      }
     })
 
-    promiseChain.then(results => {
+    if (!promiseChain) {
       callback(null, results)
-    }).catch(error => callback(error))
+    }
+    else {
+      // handle the final promise and excute the callback
+      promiseChain.then(data => {
+        results.push(data)
+        callback(null, results)
+      }).catch(error => callback(error))
+    }
   }
 }

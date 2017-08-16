@@ -136,7 +136,7 @@ describe('Migrations Tests', async () => {
 
     // execute the migrations and retest
     const migrations = new Migrations({path: path.resolve(__dirname, 'migrations')})
-    await (migrate(migrations))
+    await migrate(migrations)
     const storedModelsAfter1 = await modelFind(TestModel, {$sort: 'createdDate'})
     expect(storedModelsAfter1.length).toBe(3)
     expect(storedModelsAfter1[0].attributes.myIntegerField).toBe(777)
@@ -146,7 +146,7 @@ describe('Migrations Tests', async () => {
     expect(storedModelsAfter1[2].attributes.myTextField).toBe('blah2')
 
     const migrationsMutliple = new Migrations({path: path.resolve(__dirname, 'migrationsMultiple')})
-    await (migrate(migrationsMutliple))
+    await migrate(migrationsMutliple)
     const storedModelsAfter2 = await modelFind(TestModel, {$sort: 'createdDate'})
     expect(storedModelsAfter2.length).toBe(5)
     expect(storedModelsAfter2[0].attributes.myIntegerField).toBe(777)
@@ -158,5 +158,10 @@ describe('Migrations Tests', async () => {
     expect(storedModelsAfter2[3].attributes.myTextField).toBe('blah3')
     expect(storedModelsAfter2[4].attributes.myIntegerField).toBe(444)
     expect(storedModelsAfter2[4].attributes.myTextField).toBe('blah4')
+  })
+
+  test('should be able to handle empty migrations folder', async () => {
+    const migrationsEmpty = new Migrations({path: path.resolve(__dirname, 'migrationsEmpty')})
+    await migrate(migrationsEmpty)
   })
 })
