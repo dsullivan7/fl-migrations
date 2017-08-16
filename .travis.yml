@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - "node"
+  - "7"
+  - "6"
+  - "5"
+after_success: npm run coverage
+services:
+  - postgresql
+before_script:
+  - psql -c 'create database fl_migrations_test;' -U postgres

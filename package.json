@@ -5,7 +5,8 @@
   "main": "distribution/index.js",
   "scripts": {
     "create-db": "psql -tc \"SELECT 1 FROM pg_database WHERE datname = '$DATABASE_NAME'\" | grep -q 1 || psql -c \"CREATE DATABASE $DATABASE_NAME\"",
-    "test": "eval $(cat .test_env) npm run create-db && eval $(cat .test_env) jest --forceExit --coverage",
+    "test": "jest --forceExit --coverage",
+    "coverage": "nyc report --temp-directory=coverage --reporter=text-lcov | coveralls",
     "test-debug": "eval $(cat .test_env) jest",
     "clean": "rimraf distribution",
     "lint": "eslint .",
@@ -41,6 +42,7 @@
     "eslint-plugin-react": "^3.4.2",
     "fl-backbone-sql": "^2.5.0",
     "jest": "^20.0.4",
+    "nyc": "^11.1.0",
     "pg": "^4.5.1",
     "queue-async": "^1.0.7",
     "rimraf": "^2.6.1",
