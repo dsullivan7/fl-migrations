@@ -14,7 +14,7 @@ npm install fl-migrations
 
 ## Usage
 ```
-Coming soon...
+Coming soon..
 ```
 
 ## Tests
