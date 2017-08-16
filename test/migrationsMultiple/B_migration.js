@@ -6,8 +6,8 @@ module.exports = {
   up: (callback) => {
     const queue = new Queue()
     const newModels = [
-      {myTextField: 'blah1', myIntegerField: 111},
-      {myTextField: 'blah2', myIntegerField: 222},
+      {myTextField: 'blah3', myIntegerField: 333},
+      {myTextField: 'blah4', myIntegerField: 444},
     ]
 
     newModels.forEach(attributes => {

@@ -34,14 +34,12 @@
     "babel-preset-es2015": "^6.24.0",
     "babel-preset-stage-2": "^6.22.0",
     "babel-register": "^6.24.0",
-    "backbone": "^1.2.0",
     "backbone-http": "^0.7.2",
     "eslint": "^1.5.1",
     "eslint-config-founderlab": "^0.2.0",
     "eslint-loader": "^1.1.1",
     "eslint-plugin-react": "^3.4.2",
     "fl-backbone-sql": "^2.5.0",
-    "fl-server-utils": "^0.11.0",
     "jest": "^20.0.4",
     "pg": "^4.5.1",
     "queue-async": "^1.0.7",
@@ -49,6 +47,8 @@
     "superagent": "^3.5.2"
   },
   "dependencies": {
+    "fl-server-utils": "^0.11.0",
+    "backbone": "^1.2.0",
     "backbone-orm": "^0.7.14"
   }
 }
