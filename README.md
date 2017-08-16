@@ -13,11 +13,38 @@ npm install fl-migrations
 ```
 
 ## Usage
+
+### Sample Migration File
+
+```javascript
+// 00001_migration.js
+import YourModel from './some_model_directory/YourModel'
+
+module.exports = {
+  up: (callback) => {
+    const newModel = new YourModel({field1: 'someValue', field2: 'someOtherValue'})
+    newModel.save(callback)
+  },
+}
 ```
-Coming soon...
+
+### Execute Migrations
+```javascript
+import { Migrations } from 'fl-migrations'
+
+migrations = new Migrations({
+  // required, the location of the migrations files
+  path: './my_migrations_directory'
+
+  // optional, the path to match migration files, defaults to '.js$'
+  pattern: '.js$'
+})
+
+migrations.migrate()
 ```
 
 ## Tests
 ```
-npm test
+eval $(cat .test_env) npm run create-db
+eval $(cat .test_env) npm test
 ```
