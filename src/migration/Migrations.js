@@ -9,7 +9,7 @@ export default class Migrations {
     this.path = configuration.path
   }
 
-  migrationPromise = (directory, filename) => () =>
+  migrationPromise = (directory, filename, results) =>
     new Promise((resolve, reject) => {
       MigrationModel.db().ensureSchema(err => {
         if (err) return reject(err)
@@ -30,7 +30,8 @@ export default class Migrations {
             const migration = new MigrationModel({name: filename})
             migration.save((err, data) => {
               if (err) return reject(err)
-              resolve(data)
+              results.push(data)
+              resolve(results)
             })
           })
         })
@@ -39,22 +40,16 @@ export default class Migrations {
 
   migrate = (callback) => {
     const fileList = fs.readdirSync(this.path)
-    const promiseList = fileList.sort().map(filename => {
-      return this.migrationPromise(this.path, filename)
-    })
     const results = []
-    const initialPromise = promiseList.shift()
-    let promiseChain = initialPromise()
+    let promiseChain = Promise.resolve()
 
-    promiseList.forEach((promise) => {
-      promiseChain = promiseChain.then((data) => {
-        results.push(data)
-        return promise()
-      }).catch(error => callback(error))
+    fileList.sort().forEach(filename => {
+      promiseChain = promiseChain.then(() => {
+        return this.migrationPromise(this.path, filename, results)
+      })
     })
 
-    promiseChain.then(data => {
-      results.push(data)
+    promiseChain.then(results => {
       callback(null, results)
     }).catch(error => callback(error))
   }
