@@ -7,6 +7,7 @@ import MigrationModel from '../models/Migration'
 export default class Migrations {
   constructor(configuration) {
     this.path = configuration.path
+    this.pattern = configuration.pattern ? new RegExp(configuration.pattern) : new RegExp('.js$')
   }
 
   migrationPromise = (directory, filename, results) =>
@@ -43,7 +44,7 @@ export default class Migrations {
 
   migrate = (callback) => {
     // sort the file list to ensure we are executing migrations in order
-    const fileList = fs.readdirSync(this.path).sort()
+    const fileList = fs.readdirSync(this.path).filter((filename) => this.pattern.test(filename)).sort()
     let promiseChain = Promise.resolve([])
 
     fileList.forEach(filename => {
