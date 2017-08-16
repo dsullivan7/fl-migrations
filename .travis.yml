@@ -5,6 +5,8 @@ node_js:
   - "6"
   - "5"
 after_success: npm run coverage
+env:
+  - DATABASE_URL=postgres://localhost:5432/fl_migrations_test
 services:
   - postgresql
 before_script:
