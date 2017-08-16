@@ -1,19 +1,19 @@
-import Queue from 'queue-async'
-
 import TestModel from '../models/TestModel'
+
+import { modelSaveChain } from '../utils'
 
 module.exports = {
   up: (callback) => {
-    const queue = new Queue()
     const newModels = [
       {myTextField: 'blah1', myIntegerField: 111},
       {myTextField: 'blah2', myIntegerField: 222},
     ]
 
+    let promiseChain = Promise.resolve([])
     newModels.forEach(attributes => {
-      queue.defer(callback => new TestModel(attributes).save(callback))
+      promiseChain = promiseChain.then(results => modelSaveChain(new TestModel(attributes), results))
     })
 
-    queue.await(callback)
+    promiseChain.then(results => callback(null, results)).catch(err => callback(err))
   },
 }
