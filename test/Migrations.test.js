@@ -43,7 +43,7 @@ const up = (migration) => new Promise((resolve, reject) => {
 })
 
 const reset = (migration) => new Promise((resolve, reject) => {
-  migration.__reset((err, data) => {
+  migration.reset((err, data) => {
     if (err) return reject(err)
     return resolve(data)
   })

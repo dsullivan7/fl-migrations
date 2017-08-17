@@ -56,7 +56,7 @@ export default class Migrations {
     promiseChain.then(results => callback(null, results)).catch(error => callback(error))
   }
 
-  __reset = (callback) => {
+  reset = (callback) => {
     MigrationModel.db().resetSchema(callback)
   }
 }
