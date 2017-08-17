@@ -43,6 +43,11 @@ migrations = new Migrations({
 migrations.migrate()
 ```
 
+### Reset Migrations
+```javascript
+migrations.reset()
+```
+
 ## Tests
 ```
 eval $(cat .test_env) npm run create-db
