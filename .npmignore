@@ -6,5 +6,9 @@ test
 .babelrc
 coverage
 
-#linters
+# linters
 .eslintrc*
+.eslintignore*
+
+# test
+.test_env

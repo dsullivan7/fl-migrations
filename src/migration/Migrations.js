@@ -27,7 +27,7 @@ export default class Migrations {
           // perform the migration
           const migrationPath = path.resolve(directory, filename)
           const migrationExecution = new Migration({path: migrationPath})
-          migrationExecution.migrate((err) => {
+          migrationExecution.up((err) => {
             if (err) return reject(err)
 
             // create a new entry in the db to keep track of the executed migration
@@ -42,7 +42,7 @@ export default class Migrations {
       })
     })
 
-  migrate = (callback) => {
+  up = (callback) => {
     // sort the file list to ensure we are executing migrations in order
     const fileList = fs.readdirSync(this.path).filter((filename) => this.pattern.test(filename)).sort()
     let promiseChain = Promise.resolve([])
@@ -54,5 +54,9 @@ export default class Migrations {
     })
 
     promiseChain.then(results => callback(null, results)).catch(error => callback(error))
+  }
+
+  __reset = (callback) => {
+    MigrationModel.db().resetSchema(callback)
   }
 }

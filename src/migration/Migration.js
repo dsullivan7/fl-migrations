@@ -3,7 +3,7 @@ export default class Migration {
     this.path = configuration.path
   }
 
-  migrate = (callback) => {
+  up = (callback) => {
     const migration = require(this.path)
     migration.up(callback)
   }
