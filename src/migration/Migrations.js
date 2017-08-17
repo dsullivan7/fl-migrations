@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import Migration from './Migration'
+import MigrationExector from './Migration'
 import MigrationModel from '../models/Migration'
 
 export default class Migrations {
@@ -26,13 +26,13 @@ export default class Migrations {
 
           // perform the migration
           const migrationPath = path.resolve(directory, filename)
-          const migrationExecution = new Migration({path: migrationPath})
-          migrationExecution.up((err) => {
+          const migrationExector = new MigrationExector({path: migrationPath})
+          migrationExector.up((err) => {
             if (err) return reject(err)
 
             // create a new entry in the db to keep track of the executed migration
-            const migration = new MigrationModel({name: filename})
-            migration.save((err, data) => {
+            const migrationModel = new MigrationModel({name: filename})
+            migrationModel.save((err, data) => {
               if (err) return reject(err)
               results.push(data)
               resolve(results)
