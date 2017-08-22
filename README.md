@@ -8,7 +8,7 @@
 fl-migrations is an implementation of migrations for backbone-orm
 
 ## Install
-```
+```bash
 npm install fl-migrations
 ```
 
@@ -49,7 +49,7 @@ migrations.reset()
 ```
 
 ## Tests
-```
+```bash
 eval $(cat .test_env) npm run create-db
 eval $(cat .test_env) npm test
 ```
